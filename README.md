@@ -4,6 +4,7 @@ REST API of a products catalog with user adminstrators. The stack i used is Pyth
 
 ## Instalation
 
+You need to have a Mailgun account in order to send notifications. After you have one get the **api key and domain** and put them in your .env file
 You need to fill a **.env** file with the corresponding values shown in the **example.env** blueprint. After you've done with the .env file save it in the root directory of the repository.
 Next you need to clone this repository and within the directory it creates run:
 
@@ -97,3 +98,7 @@ There are three entities in this app:
 #### /products GET
 
 -   Returns a list of all the products
+
+## Notes
+
+-   Mailgun policies state that if you are using a free account you can only send emails to accounts you register in your dashboard
