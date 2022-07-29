@@ -18,9 +18,30 @@ class Product(Resource):
         return product_schema.dump(product), 200
     
     @classmethod
+    @jwt_required()
     def put(cls, sku: str):
-        pass
+        product_json = product_schema.load(request.get_json())
+        product = ProductModel.find_by_sku(sku)
+
+        if not product:
+            return {"message": "Product Not Found"}, 404
+        if ProductModel.find_by_sku(product_json.sku):
+            return {"message": "SKU already registered"}, 400
+        
+        product.name = product_json.name
+        product.price = product_json.price
+        product.stock = product_json.stock
+        product.brand = product_json.brand
+        product.sku = product_json.sku
+        
+        product.save_to_db()
+
+        # TODO Add notification feature
+
+        return product_schema.dump(product), 200
+
     @classmethod
+    @jwt_required()
     def delete(cls, sku: str):
         product = ProductModel.find_by_sku(sku)
         #TODO: Add notification feature
