@@ -1,0 +1,6 @@
+docker-compose.yml
+Dockerfile
+ZebrandsTestEnv/
+.git
+.gitignore
+__pycache__/

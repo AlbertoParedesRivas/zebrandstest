@@ -84,3 +84,17 @@ class Admin(Resource):
         
         admin.save_to_db()
         return admin_schema.dump(admin), 200
+
+def firstAdmin():
+    adminCount = len(AdminModel.find_all())
+    print(f"adminCount {adminCount}")
+    if adminCount == 0:
+        admin_schema = AdminSchema()
+        admin_data = {
+            "name": "Alberto",
+            "lastname": "Paredes Rivas",
+            "email": "alberto.paredes.bs@gmail.com",
+            "password": "123456"
+        }
+        admin = admin_schema.load(admin_data)
+        admin.save_to_db()

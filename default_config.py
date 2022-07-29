@@ -1,7 +1,7 @@
 import os
 
 DEBUG = True
-SQLALCHEMY_DATABASE_URI = "postgresql://postgres:example@localhost:5432/postgres"
+SQLALCHEMY_DATABASE_URI = "postgresql://postgres:example@postgres:5432/postgres"
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 PROPAGATE_EXCEPTIONS = True
 JWT_SECRET_KEY = os.environ["JWT_SECRET_KEY"]
