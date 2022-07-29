@@ -1,0 +1,262 @@
+{
+	"info": {
+		"_postman_id": "750e1697-dfa0-40d0-b626-ea768e2aba7b",
+		"name": "Users",
+		"description": "Endpoints related to admin resources",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14885331"
+	},
+	"item": [
+		{
+			"name": "Register New Administrator",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Alberto\",\n    \"lastname\": \"Paredes\",\n    \"email\": \"alberto.paredes.bs@gmail.com\",\n    \"password\": \"pass123456\"\n}   "
+				},
+				"url": {
+					"raw": "{{url}}/admins",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"admins"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Administrator",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Alberto\",\n    \"lastname\": \"Paredes Alanis\",\n    \"email\": \"wallstaken@outlook.com\",\n    \"password\": \"123456\"\n}   "
+				},
+				"url": {
+					"raw": "{{url}}/admins/:admin_id",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"admins",
+						":admin_id"
+					],
+					"variable": [
+						{
+							"key": "admin_id",
+							"value": "3a557cfe-076a-419b-a8e3-e87e4c7ce3b6"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List Administrators",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{url}}/admins",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"admins"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Administrator",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/admins/:admin_id",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"admins",
+						":admin_id"
+					],
+					"variable": [
+						{
+							"key": "admin_id",
+							"value": "7a690156-4ad4-43e8-9cd3-3f97cad937a5"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Administrator",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{url}}/admins/:admin_id",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"admins",
+						":admin_id"
+					],
+					"variable": [
+						{
+							"key": "admin_id",
+							"value": "7a690156-4ad4-43e8-9cd3-3f97cad937a5"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"if (jsonData.access_token !== undefined) {",
+							"    postman.setEnvironmentVariable(\"access_token\", jsonData.access_token);",
+							"} else {",
+							"    postman.setEnvironmentVariable(\"access_token\", null);",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"alberto.paredes.bs@gmail.com\",\n    \"password\": \"123456\"\n}"
+				},
+				"url": {
+					"raw": "{{url}}/login",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
