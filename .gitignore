@@ -3,3 +3,4 @@ Dockerfile
 ZebrandsTestEnv/
 __pycache__/
 data.db
+.env

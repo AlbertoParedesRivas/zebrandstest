@@ -8,3 +8,4 @@ flask-marshmallow
 marshmallow-sqlalchemy
 psycopg2-binary
 bcrypt
+requests

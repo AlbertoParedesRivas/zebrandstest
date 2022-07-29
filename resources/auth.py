@@ -15,7 +15,8 @@ class Login(Resource):
         admin = AdminModel.find_by_email(admin_data["email"])
 
         if admin and checkpw(password, admin.password.encode("utf-8")):
-            access_token = create_access_token(identity=admin.id)
+            additional_claims = {"name": f"{admin.name} {admin.lastname}"}
+            access_token = create_access_token(identity=admin.id, additional_claims=additional_claims)
             return {"access_token": access_token}, 200
         
         return {"message": "Invalid Credentials"}, 401

@@ -59,22 +59,28 @@ class Admin(Resource):
     @jwt_required()
     def put(cls, admin_id: str):
         admin_json = admin_schema.load(request.get_json())
+        adminFromEmailJson = AdminModel.find_by_email(admin_json.email)
 
-        if AdminModel.find_by_email(admin_json.email):
-            return {"message": "admin_email_exists"}, 400
         
         if is_valid_uuid(admin_id):
             admin = AdminModel.find_by_id(admin_id)
         else:
-            admin = None
+            return {"message": "Admin not found"}, 404
+
+        if adminFromEmailJson and adminFromEmailJson.id != admin.id:
+            return {"message": "Email already registered"}, 400
 
         if admin:
-            admin.name = admin_json.name
-            admin.lastname = admin_json.lastname
-            admin.email = admin_json.email
-            admin.password = admin_json.password
+            if admin.name != admin_json.name:
+                admin.name = admin_json.name
+            if admin.lastname != admin_json.lastname:
+                admin.lastname = admin_json.lastname
+            if admin.email != admin_json.email:
+                admin.email = admin_json.email
+            if admin.password != admin_json.password:
+                admin.password = admin_json.password
         else:
-            admin = admin_json
+            return {"message": "Admin not found"}, 404
         
         admin.save_to_db()
         return admin_schema.dump(admin), 200

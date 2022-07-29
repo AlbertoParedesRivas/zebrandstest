@@ -1,9 +1,11 @@
 from flask import request
-from flask_jwt_extended import get_jwt_identity, jwt_required, verify_jwt_in_request
+from flask_jwt_extended import get_jwt, jwt_required, verify_jwt_in_request
 from flask_restful import Resource
+from common.mailgun import MailgunException
 from models.product import ProductModel
 from schemas.product import ProductSchema
 from models.product_view import ProductViewModel
+from common.notification import sendNotification
 
 product_schema = ProductSchema()
 product_list_schema = ProductSchema(many = True)
@@ -32,18 +34,40 @@ class Product(Resource):
 
         if not product:
             return {"message": "Product Not Found"}, 404
-        if ProductModel.find_by_sku(product_json.sku):
+        productFromJsonSku = ProductModel.find_by_sku(product_json.sku)
+        if productFromJsonSku and product.id != productFromJsonSku.id:
             return {"message": "SKU already registered"}, 400
         
-        product.name = product_json.name
-        product.price = product_json.price
-        product.stock = product_json.stock
-        product.brand = product_json.brand
-        product.sku = product_json.sku
+        updatedFields = []
+        
+        if product.name != product_json.name:
+            product.name = product_json.name
+            updatedFields.append("name")
+            
+        if product.price != product_json.price:
+            product.price = product_json.price
+            updatedFields.append("price")
+        
+        if product.stock != product_json.stock:
+            product.stock = product_json.stock
+            updatedFields.append("stock")
+
+        if product.brand != product_json.brand:
+            product.brand = product_json.brand
+            updatedFields.append("brand")
+
+        if product.sku != product_json.sku:
+            product.sku = product_json.sku
+            updatedFields.append("sku")
         
         product.save_to_db()
+        claims = get_jwt()
+        
+        try: 
+            sendNotification("UPDATE", {"author": claims["name"], "sku": product.sku, "name": product.name, "updatedFields": updatedFields})
+        except MailgunException as e:
+            return {"message": str(e)}, 500
 
-        # TODO Add notification feature
 
         return product_schema.dump(product), 200
 
@@ -51,12 +75,18 @@ class Product(Resource):
     @jwt_required()
     def delete(cls, sku: str):
         product = ProductModel.find_by_sku(sku)
-        #TODO: Add notification feature
 
         if not product:
             return {"message": "Product Not Found"}, 404
 
         product.delete_from_db()
+
+        claims = get_jwt()
+        try:
+            sendNotification("DELETE", {"author": claims["name"], "sku": product.sku, "name": product.name})
+        except MailgunException as e:
+            return {"message": str(e)}, 500
+
         return {"message": "Product Deleted"}, 200
         
 
@@ -68,9 +98,15 @@ class RegisterProduct(Resource):
 
         if ProductModel.find_by_sku(product.sku):
             return {"message": "SKU already registered"}, 400
-        # TODO: Add notification feature
         try:
             product.save_to_db()
+
+            claims = get_jwt()
+            try:
+                sendNotification("REGISTER", {"author": claims["name"], "sku": product.sku, "name": product.name})
+            except MailgunException as e:
+                return {"message": str(e)}, 500
+
             return product_schema.dump(product), 200
         except:
             return {"message": "Error creating product"}, 500
