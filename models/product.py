@@ -3,25 +3,26 @@ from sqlalchemy.dialects.postgresql import UUID
 from common.db import db
 from typing import List
 
-class AdminModel(db.Model):
-    __tablename__ = "users"
+class ProductModel(db.Model):
+    __tablename__ = "products"
 
     id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    sku = db.Column(db.String(80), nullable=False, unique=True)
     name = db.Column(db.String(80), nullable=False)
-    lastname = db.Column(db.String(80), nullable=False)
-    email = db.Column(db.String(80), nullable=False, unique=True)
-    password = db.Column(db.String(80), nullable=False)
+    price = db.Column(db.Float(precision=2), nullable=False)
+    brand = db.Column(db.String(80), nullable=False)
+    stock = db.Column(db.Integer, nullable=False)
 
     @classmethod
-    def find_by_email(cls, email: str) -> "AdminModel":
-        return cls.query.filter_by(email=email).first()
-
-    @classmethod
-    def find_by_id(cls, _id: str) -> "AdminModel":
+    def find_by_id(cls, _id: str) -> "ProductModel":
         return cls.query.filter_by(id=_id).first()
     
     @classmethod
-    def find_all(cls) -> List["AdminModel"]:
+    def find_by_sku(cls, _sku: str) -> "ProductModel":
+        return cls.query.filter_by(sku=_sku).first()
+    
+    @classmethod
+    def find_all(cls) -> List["ProductModel"]:
         return cls.query.all()
     
     def save_to_db(self) -> None:
