@@ -47,35 +47,53 @@ There are three entities in this app:
 
 ### Admins related endpoints
 
-**/login POST:**
+#### /login POST:
 
 -   Receives email and password
 -   Returns an access_token
-    **/admins POST**
+
+#### /admins POST
+
 -   Receives name, lastname, email and password
 -   Returns the created admin
-    **/admins GET**
+
+#### /admins GET
+
 -   Returns a list of all the administrators
-    **/admins/:admin_id GET**
+
+#### /admins/:admin_id GET
+
 -   Returns the admin with id of :admin_id
-    **/admins/:admin_id PUT**
+
+#### /admins/:admin_id PUT
+
 -   Receives name, lastname, email and password
 -   Returns the modified admin with id of :admin_id
-    **/admins/:admin_id DELETE**
+
+#### /admins/:admin_id DELETE
+
 -   Returns a message stating if the administrator with id of :admin_id has been deleted
 
 ### Products related endpoints
 
-**/products/:product_id GET**
+#### /products/:product_id GET
 
 -   Returns the product with the id of :product_id
-    **/products/:product_id DELETE**
+
+#### /products/:product_id DELETE
+
 -   Returns a message stating if the product with id of :product_id has been deleted
-    **/products/:product_id PUT**
+
+#### /products/:product_id PUT
+
 -   Receives name, price, brand, stock and sku
 -   Returns the modified product with id of :admin_id
-    **/products POST**
+
+#### /products POST
+
 -   Receives name, price, brand, stock and sku
 -   Returns the created product
-    **/products GET**
+
+#### /products GET
+
 -   Returns a list of all the products
