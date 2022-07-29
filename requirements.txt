@@ -5,3 +5,5 @@ python-dotenv
 marshmallow
 flask-marshmallow
 marshmallow-sqlalchemy
+psycopg2-binary
+bcrypt

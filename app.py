@@ -7,7 +7,7 @@ load_dotenv(".env", verbose=True)
 
 from common.db import db
 from common.ma import ma
-from resources.admin import AdminSignUp, AdminList
+from resources.admin import AdminSignUp, Admin
 
 app = Flask(__name__)
 app.config.from_object("default_config")
@@ -21,8 +21,8 @@ def create_tables():
 def handle_marshmallow_validation(err):
     return jsonify(err.messages), 400
 
-api.add_resource(AdminSignUp, "/admin/signup")
-api.add_resource(AdminList, "/admins")
+api.add_resource(AdminSignUp, "/admins")
+api.add_resource(Admin, "/admins/<string:admin_id>")
 
 if __name__ == '__main__':
     db.init_app(app)
