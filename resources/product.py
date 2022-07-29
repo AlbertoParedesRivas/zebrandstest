@@ -1,8 +1,9 @@
 from flask import request
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import get_jwt_identity, jwt_required, verify_jwt_in_request
 from flask_restful import Resource
 from models.product import ProductModel
 from schemas.product import ProductSchema
+from models.product_view import ProductViewModel
 
 product_schema = ProductSchema()
 product_list_schema = ProductSchema(many = True)
@@ -11,10 +12,16 @@ class Product(Resource):
     @classmethod
     def get(cls, sku: str):
         product = ProductModel.find_by_sku(sku)
-        #TODO: Add view count
 
         if not product:
             return {"message": "Product Not Found"}, 404
+        
+        if not verify_jwt_in_request(optional=True):
+            product_views = ProductViewModel(productId=product.id)
+            product_views.save_to_db()
+            
+        print(product.views)
+
         return product_schema.dump(product), 200
     
     @classmethod
