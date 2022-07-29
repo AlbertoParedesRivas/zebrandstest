@@ -1,3 +1,7 @@
 Flask
 Flask-RESTful
 Flask-SQLAlchemy
+python-dotenv
+marshmallow
+flask-marshmallow
+marshmallow-sqlalchemy
